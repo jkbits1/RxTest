@@ -25,11 +25,11 @@ namespace WinFormsApp45_NuGet
 
             var input = 
                     Observable.FromEventPattern(textBox1, "TextChanged").
-                        Select(evt => ((TextBox)evt.Sender).Text).Throttle(TimeSpan.FromSeconds(.5)).
+                        Select(evt => ((TextBox)evt.Sender).Text).Throttle(TimeSpan.FromSeconds(.2)).
                         DistinctUntilChanged();
 
             var xs = from word in input.StartWith("")
-                     from length in Task.Run(async () => { await Task.Delay(250); return word.Length; })
+                     from length in Task.Run(async () => { await Task.Delay(50); return word.Length; })
                      select length;
 
             var res = xs.CombineLatest(clock, (len, now) => now.ToString() + " - Word length = " + len);
