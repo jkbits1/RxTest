@@ -62,3 +62,13 @@ namespace WinFormsApp45_NuGet
         }
     }
 }
+
+// http://www.introtorx.com/content/v1.0.10621.0/05_Filtering.html
+// http://reactivex.io/documentation/operators/filter.html
+// https://msdn.microsoft.com/en-us/library/system.reactive.linq.observable(v=vs.103).aspx
+// http://rxwiki.wikidot.com/101samples#toc47
+// https://visualstudiomagazine.com/articles/2013/04/10/essential-reactive-extensions.aspx
+// https://msdn.microsoft.com/en-us/library/hh194873(v=vs.110).aspx
+// https://msdn.microsoft.com/en-us/library/hh242977(v=vs.103).aspx
+// https://github.com/Reactive-Extensions/Rx.NET
+// http://www.oliver-lohmann.me/an-rx-enabled-wpf-autocomplete-textbox-part-2-2/
