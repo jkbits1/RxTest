@@ -23,41 +23,41 @@ namespace WinFormsApp45_NuGet
         {
             var clock = MyExtensions.GetClock();
 
-            var input = 
+            var obsInput = 
                     Observable.FromEventPattern(textBox1, "TextChanged").
                         Select(evt => ((TextBox)evt.Sender).Text).Throttle(TimeSpan.FromSeconds(.2)).
                         DistinctUntilChanged();
 
-            var input2 =
+            var obsInput2 =
                     Observable.FromEventPattern(textBox2, "TextChanged").
                         Select(evt => ((TextBox)evt.Sender).Text).Throttle(TimeSpan.FromSeconds(.2)).
                         DistinctUntilChanged();
 
-            var xs = from word in input.StartWith("")
+            var obsLen = from word in obsInput.StartWith("")
                      from length in Task.Run(async () => { await Task.Delay(50); return word.Length; })
                      select length;
 
             // text for length
-            var res = xs.CombineLatest(clock, (len, now) => now.ToString() + " - Word length = " + len);
+            var obsLenText = obsLen.CombineLatest(clock, (len, now) => now.ToString() + " - Word length = " + len);
 
-            res.ObserveOn(this).Subscribe(s =>
+            obsLenText.ObserveOn(this).Subscribe(lenText =>
             {
-                labelLength.Text = s.ToString();
+                labelLength.Text = lenText.ToString();
             });
 
             // text for combined
-            var merged = input2.CombineLatest(res, (s, s2) => s2 + " " + s);
+            var obsMergedLenInput2 = obsInput2.CombineLatest(obsLenText, (input2Text, lenText) => lenText + " " + input2Text);
 
-            merged.ObserveOn(this).Subscribe(s => {
-                labelCombined.Text = s.ToString();
+            obsMergedLenInput2.ObserveOn(this).Subscribe(lenInput2Text => {
+                labelCombined.Text = lenInput2Text.ToString();
             });
 
             // text for filtered
-            var s2Filtered = merged.Where(s => s.Contains("s"));
+            var obsMergedFiltered = obsMergedLenInput2.Where(lenInput2Text => lenInput2Text.Contains("s"));
 
-            s2Filtered.ObserveOn(this).Subscribe(s =>
+            obsMergedFiltered.ObserveOn(this).Subscribe(lenInput2TextFiltered =>
             {
-                labelFiltered.Text = s.ToString();
+                labelFiltered.Text = lenInput2TextFiltered.ToString();
             });
         }
     }
